@@ -1,16 +1,9 @@
 package com.avinash.requestresource;
 
 import android.annotation.SuppressLint;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +12,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.dynamic.SupportFragmentWrapper;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,7 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class login_activity extends AppCompatActivity {
+public class register_activity extends AppCompatActivity {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -66,26 +62,25 @@ public class login_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_login_activity);
-        final Context context = this;
+        setContentView(R.layout.activity_register_activity);
+
         mVisible = true;
         mContentView = findViewById(R.id.fullscreen_content);
-        username = (EditText) findViewById(R.id.login_activity_username);
-        password = (EditText) findViewById(R.id.login_activity_password);
-        login_button = (Button) findViewById(R.id.login_activity_button);
-        FrameLayout fl= (FrameLayout) findViewById(R.id.login_activity_framelayout);
+        username = (EditText) findViewById(R.id.register_activity_username);
+        password = (EditText) findViewById(R.id.register_activity_password);
+        login_button = (Button) findViewById(R.id.register_activity_button);
+        FrameLayout fl= (FrameLayout) findViewById(R.id.register_activity_framelayout);
 
         fl.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeLeft() {
-                Toast.makeText(login_activity.this,"this is swipe left", Toast.LENGTH_SHORT).show();
-                moveToRegisterScreen();
+//                Toast.makeText(register_activity.this,"this is swipe left", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
-//                Toast.makeText(login_activity.this, "this is swipe right", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
@@ -97,10 +92,10 @@ public class login_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(validateUserEnteredData(username.getText().toString(), password.getText().toString()) == true){
-                    validateUserCrednetials(username.getText().toString(), password.getText().toString());
-//                    createUserWithEmail(username.getText().toString(), password.getText().toString());
+                    //validateUserCrednetials(username.getText().toString(), password.getText().toString());
+                    createUserWithEmail(username.getText().toString(), password.getText().toString());
                 }else{
-                    Toast.makeText(getApplicationContext(),"Plese enter details!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Plese enter valid details!!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -119,7 +114,7 @@ public class login_activity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "SignInWithEmail:failure", task.getException());
-                            Toast.makeText(login_activity.this, "Authentication failed.",
+                            Toast.makeText(register_activity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null, "login");
                         }
@@ -169,13 +164,8 @@ public class login_activity extends AppCompatActivity {
 
     }
 
-    private void moveToRegisterScreen(){
-        Intent registerActivity = new Intent(this, register_activity.class);
-        startActivity(registerActivity);
-    }
-
     private void userCreationFailed() {
-        Toast.makeText(login_activity.this, "User reation failed. Try again.",
+        Toast.makeText(register_activity.this, "User reation failed. Try again.",
                 Toast.LENGTH_LONG).show();
     }
 

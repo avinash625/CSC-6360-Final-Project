@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/login_activity_framelayout"
+    android:id="@+id/register_activity_framelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00B8D4"
@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:textColor="#33b5e5"
+        android:textColor="#01E84D"
         android:textSize="50sp"
         android:textStyle="bold" />
 
@@ -29,7 +29,7 @@
         android:fitsSystemWindows="true">
 
         <EditText
-            android:id="@+id/login_activity_username"
+            android:id="@+id/register_activity_username"
             android:layout_width="0dp"
             android:layout_height="58dp"
             android:ems="10"
@@ -42,7 +42,7 @@
             app:layout_constraintWidth_percent="0.6" />
 
         <EditText
-            android:id="@+id/login_activity_password"
+            android:id="@+id/register_activity_password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -50,20 +50,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_activity_username"
+            app:layout_constraintTop_toBottomOf="@+id/register_activity_username"
             app:layout_constraintVertical_bias="0.01999998"
             app:layout_constraintWidth_percent="0.6" />
 
         <Button
-            android:id="@+id/login_activity_button"
+            android:id="@+id/register_activity_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="Register"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.500"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_activity_password"
+            app:layout_constraintTop_toBottomOf="@+id/register_activity_password"
             app:layout_constraintVertical_bias="0.600"
             app:layout_constraintWidth_percent=".6" />
     </androidx.constraintlayout.widget.ConstraintLayout>
