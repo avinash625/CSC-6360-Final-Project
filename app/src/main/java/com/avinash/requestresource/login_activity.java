@@ -58,8 +58,8 @@ public class login_activity extends AppCompatActivity {
     private EditText password;
     private Button login_button;
     private FirebaseAuth mAuth;
-    
     private FirebaseUser user;
+
 
 
     @Override
