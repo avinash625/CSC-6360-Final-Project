@@ -34,7 +34,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -119,21 +121,33 @@ public class MainActivity extends AppCompatActivity {
         user = mAuth.getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Requests request = new Requests();
-        request.setTitle("test request");
-        request.setUserID(user.getUid());
-        request.setDescription("a test Description");
-        request.setPriority("Highest");
-        request.setCompleted(false);
-        request.setQuantity(3);
+        Map<String, Object> request = new HashMap<>();
+        request.put("quantity", "2");
+        request.put("completed", "");
+        request.put("userID", user.getUid());
+        request.put("title","testtitle");
+        request.put("description","test description");
+        request.put("priority", "Highest");
+        request.put("addressedBy","");
+
+//        Requests request = new Requests();
+//        request.setTitle("test request");
+//        request.setUserID(user.getUid());
+//        request.setDescription("a test Description");
+//        request.setPriority("Highest");
+//        request.setCompleted(false);
+//        request.setQuantity(3);
 
 
-        db.collection("requests").add(request).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+        db.collection("requests")
+                .add(request)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);

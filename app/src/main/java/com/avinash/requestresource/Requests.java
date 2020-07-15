@@ -2,12 +2,12 @@ package com.avinash.requestresource;
 
 public class Requests extends Throwable {
     private int requestID;
+    private int quantity;
+    private boolean completed;
     private String userID;
     private String title;
     private String description;
-    private int quantity;
     private String priority;
-    private boolean completed;
     private String addressedBy;
 
     public int getRequestID() {
