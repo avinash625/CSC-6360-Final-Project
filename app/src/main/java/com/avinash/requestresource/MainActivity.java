@@ -6,10 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
-
 import com.google.android.gms.tasks.OnCompleteListener;
-
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -19,11 +16,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -32,10 +27,8 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,23 +36,39 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
+    boolean isRotate = false;
     private static final String TAG = "In Main Activity ";
+    private FloatingActionButton fabMic;
+    private FloatingActionButton fabCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        fabMic = (FloatingActionButton) findViewById(R.id.fabMic);
+        fabCall = (FloatingActionButton) findViewById(R.id.fabCall);
+        ViewAnimation.init((FloatingActionButton) findViewById(R.id.fabCall));
+        ViewAnimation.init((FloatingActionButton) findViewById(R.id.fabMic));
+
         setSupportActionBar(toolbar);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                isRotate = ViewAnimation.rotateFab(view, !isRotate);
+                if(isRotate){
+                    ViewAnimation.showIn(fabCall);
+                    ViewAnimation.showIn(fabMic);
+                }else{
+                    ViewAnimation.showOut(fabCall);
+                    ViewAnimation.showOut(fabMic);
+                }
                 //Do this to get insert one request record in to the firestore.
-                insertOneRequest();
+//                insertOneRequest();
                 //Do this to get available request records in the firebase.
 //                retrieveRequests();
             }
