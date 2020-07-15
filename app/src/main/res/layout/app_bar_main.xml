@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
 
-        android:src="@drawable/ic_menu_gallery"
+        android:src="@drawable/askicon"
         android:tint="@color/grey_80"
         app:backgroundTint="@color/grey_20"
         android:layout_gravity="bottom|end"
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:src="@drawable/ic_menu_logout"
+        android:src="@drawable/callicon"
         android:tint="@color/grey_80"
         app:backgroundTint="@color/grey_20"
         android:layout_gravity="bottom|end"

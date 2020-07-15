@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,23 +56,34 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FloatingActionButton fab = findViewById(R.id.fab);
+
+        fabCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Calling", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        fabMic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "mic", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+                //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //                        .setAction("Action", null).show();
                 isRotate = ViewAnimation.rotateFab(view, !isRotate);
-                if(isRotate){
+                if (isRotate) {
                     ViewAnimation.showIn(fabCall);
                     ViewAnimation.showIn(fabMic);
-                }else{
+                } else {
                     ViewAnimation.showOut(fabCall);
                     ViewAnimation.showOut(fabMic);
                 }
-                //Do this to get insert one request record in to the firestore.
-//                insertOneRequest();
-                //Do this to get available request records in the firebase.
-//                retrieveRequests();
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -87,24 +100,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void retrieveRequests() {
-             getQueryResults();
+        getQueryResults();
     }
 
     public void getQueryResults() {
-        FirebaseFirestore db  = FirebaseFirestore.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("requests")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener < QuerySnapshot > () {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task < QuerySnapshot > task) {
                         if (task.isSuccessful()) {
-                            ArrayList<Requests> requests = new ArrayList<Requests>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                            ArrayList < Requests > requests = new ArrayList < Requests > ();
+                            for (QueryDocumentSnapshot document: task.getResult()) {
                                 Requests request = new Requests();
                                 request.setQuantity(Integer.parseInt((document.get("quantity").toString())));
                                 request.setCompleted(Boolean.parseBoolean(document.get("completed").toString()));
                                 request.setTitle(document.get("title").toString());
-                                request.setDescription( document.get("description").toString());
+                                request.setDescription(document.get("description").toString());
                                 request.setUserID(document.get("userID").toString());
                                 requests.add(request);
                                 Log.d(TAG, document.getId() + " => " + document.getData());
@@ -117,10 +130,10 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(ArrayList<Requests> requests, String UITag) {
-        if(UITag.equals("requestslist")){
+    private void updateUI(ArrayList < Requests > requests, String UITag) {
+        if (UITag.equals("requestslist")) {
             //set adapter and list out the requests.
-        }else{
+        } else {
 
         }
     }
@@ -130,27 +143,27 @@ public class MainActivity extends AppCompatActivity {
         user = mAuth.getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Map<String, Object> request = new HashMap<>();
+        Map < String, Object > request = new HashMap < > ();
         request.put("quantity", "2");
         request.put("completed", "");
         request.put("userID", user.getUid());
-        request.put("title","testtitle");
-        request.put("description","test description");
+        request.put("title", "testtitle");
+        request.put("description", "test description");
         request.put("priority", "Highest");
-        request.put("addressedBy","");
+        request.put("addressedBy", "");
 
-//        Requests request = new Requests();
-//        request.setTitle("test request");
-//        request.setUserID(user.getUid());
-//        request.setDescription("a test Description");
-//        request.setPriority("Highest");
-//        request.setCompleted(false);
-//        request.setQuantity(3);
+        //        Requests request = new Requests();
+        //        request.setTitle("test request");
+        //        request.setUserID(user.getUid());
+        //        request.setDescription("a test Description");
+        //        request.setPriority("Highest");
+        //        request.setCompleted(false);
+        //        request.setQuantity(3);
 
 
         db.collection("requests")
                 .add(request)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                .addOnSuccessListener(new OnSuccessListener < DocumentReference > () {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
@@ -180,9 +193,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent settingsActivityIntent  = new Intent(this, SettingsActivity.class);
+                Intent settingsActivityIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsActivityIntent);
             default:
                 return super.onOptionsItemSelected(item);
@@ -192,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration) ||
+                super.onSupportNavigateUp();
     }
 }
