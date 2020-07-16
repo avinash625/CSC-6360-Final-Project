@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.text.Editable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -78,16 +80,20 @@ public class login_activity extends AppCompatActivity {
         fl.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeLeft() {
-                Toast.makeText(login_activity.this,"this is swipe left", Toast.LENGTH_SHORT).show();
+                //left swipe
                 moveToRegisterScreen();
+                hideSoftKeyboard();
             }
 
             @Override
             public void onSwipeRight() {
+                //right swipe
                 super.onSwipeRight();
-//                Toast.makeText(login_activity.this, "this is swipe right", Toast.LENGTH_SHORT).show();
+                hideSoftKeyboard();
             }
         });
+
+
 
         username.setHint("Username");
         password.setHint("Password");
@@ -104,6 +110,10 @@ public class login_activity extends AppCompatActivity {
                 }
             }
         });
+    }
+    protected void hideSoftKeyboard() {
+        ((InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE))
+                .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
 
     private void validateUserCrednetials(String username, String password) {
@@ -203,6 +213,15 @@ public class login_activity extends AppCompatActivity {
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EditText username = (EditText) findViewById(R.id.login_activity_username);
+        EditText password = (EditText) findViewById(R.id.login_activity_password);
+        username.setText("");
+        password.setText("");
     }
 
     /**

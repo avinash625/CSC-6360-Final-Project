@@ -195,6 +195,15 @@ public class register_activity extends AppCompatActivity {
         delayedHide(100);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EditText username = (EditText) findViewById(R.id.register_activity_username);
+        EditText password = (EditText) findViewById(R.id.register_activity_password);
+        username.setText("");
+        password.setText("");
+    }
+
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away
