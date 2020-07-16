@@ -29,7 +29,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="test" />
+                tools:text="Quantity: 3" />
+
+            <TextView
+                android:id="@+id/item_completed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:layout_weight="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
         </LinearLayout>
 
         <LinearLayout

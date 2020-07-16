@@ -121,9 +121,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getQueryResults() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("requests")
-                .get()
+                .whereEqualTo("userID", currentUser.getUid()).get()
                 .addOnCompleteListener(new OnCompleteListener < QuerySnapshot > () {
                     @Override
                     public void onComplete(@NonNull Task < QuerySnapshot > task) {
