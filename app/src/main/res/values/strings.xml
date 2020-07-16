@@ -13,6 +13,10 @@
     <string name="menu_logout">Logout</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
+    <string name="requests_list">History</string>
+    <string name="requests_new">New Request</string>
+
+
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
