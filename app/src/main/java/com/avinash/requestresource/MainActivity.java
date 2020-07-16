@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "In Main Activity ";
     private FloatingActionButton fabMic;
     private FloatingActionButton fabCall;
+    private ArrayList<Requests> requestList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(ArrayList < Requests > requests, String UITag) {
         if (UITag.equals("requestslist")) {
             //set adapter and list out the requests.
+            requestList = (ArrayList<Requests>) requests.clone();
             System.out.println("data arrived");
         } else {
 
@@ -192,6 +194,10 @@ public class MainActivity extends AppCompatActivity {
                         Log.w(TAG, "Error adding document", e);
                     }
                 });
+    }
+
+    public ArrayList<Requests> returnRequests(){
+        return requestList;
     }
 
 

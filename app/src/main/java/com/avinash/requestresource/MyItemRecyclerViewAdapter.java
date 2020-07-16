@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Requests> mValues;
 
-    public MyItemRecyclerViewAdapter(List<DummyItem> items) {
+    public MyItemRecyclerViewAdapter(List<Requests> items) {
         mValues = items;
     }
 
@@ -33,8 +33,9 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).getPriority());
+        holder.mContentView.setText(mValues.get(position).getTitle());
+        holder.mDescView.setText(mValues.get(position).getDescription());
     }
 
     @Override
@@ -46,13 +47,15 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView mDescView;
+        public Requests mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (TextView) view.findViewById(R.id.content);
+            mDescView = (TextView) view.findViewById(R.id.item_description);
         }
 
         @Override

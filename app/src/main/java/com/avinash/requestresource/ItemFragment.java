@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 
 import com.avinash.requestresource.dummy.DummyContent;
 
+import java.util.ArrayList;
+
 /**
  * A fragment representing a list of Items.
  */
@@ -65,7 +67,9 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS));
+            MainActivity mainActivity = (MainActivity) getActivity();
+            ArrayList<Requests> requests = mainActivity.returnRequests();
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(requests));
         }
         return view;
     }

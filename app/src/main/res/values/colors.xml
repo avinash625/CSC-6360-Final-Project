@@ -10,4 +10,5 @@
     <color name="login_primary">#33b5e5</color>
     <color name="login_secondary">#33B5E5</color>
     <color name="FAB_backgroundcolor">#FFFFDD00</color>
+    <color name="grey">#686666</color>
 </resources>
