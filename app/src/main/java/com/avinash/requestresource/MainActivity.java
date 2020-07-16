@@ -1,7 +1,11 @@
 package com.avinash.requestresource;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
@@ -24,8 +28,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -34,6 +40,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 //        constraintLayout.setLayoutParams(params);
 
 
-
         //get the list of requests that the current user has placed. This should be sorted according to the created time.
         getQueryResults();
         setSupportActionBar(toolbar);
@@ -75,9 +81,13 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
 
         fabCall.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Calling", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "Calling", Toast.LENGTH_SHORT).show();
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:4703579315"));
+                startActivity(callIntent);
             }
         });
 
@@ -85,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "mic", Toast.LENGTH_SHORT).show();
+                Intent newRequestIntent = new Intent(getApplicationContext(), NewRequest.class);
+                startActivity(newRequestIntent);
             }
         });
 
