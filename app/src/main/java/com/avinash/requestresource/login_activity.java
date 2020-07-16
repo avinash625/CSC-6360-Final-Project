@@ -92,9 +92,7 @@ public class login_activity extends AppCompatActivity {
                 hideSoftKeyboard();
             }
         });
-
-
-
+        
         username.setHint("Username");
         password.setHint("Password");
         mAuth = FirebaseAuth.getInstance();
