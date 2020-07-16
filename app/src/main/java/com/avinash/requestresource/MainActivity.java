@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                                 request.setTitle(document.get("title").toString());
                                 request.setDescription(document.get("description").toString());
                                 request.setUserID(document.get("userID").toString());
+                                request.setPriority(document.get("priority").toString());
                                 requests.add(request);
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }

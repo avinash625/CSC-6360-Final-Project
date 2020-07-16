@@ -33,7 +33,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getPriority());
+        holder.mIdView.setText("Quantity: " + Integer.toString(mValues.get(position).getQuantity()));
         holder.mContentView.setText(mValues.get(position).getTitle());
         holder.mDescView.setText(mValues.get(position).getDescription());
     }
