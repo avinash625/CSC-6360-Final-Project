@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#33b5e5</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimaryDark">#FC807E83</color>
     <color name="colorAccent">#33b5e5</color>
     <color name="white">#ffff</color>
     <color name="grey_20">#cccccc</color>
     <color name="grey_80">#37474F</color>
     <color name="black_overlay">#66000000</color>
     <color name="login_primary">#33b5e5</color>
-    <color name="login_secondary">#33b5e5</color>
+    <color name="login_secondary">#33B5E5</color>
+    <color name="FAB_backgroundcolor">#FFFFDD00</color>
 </resources>

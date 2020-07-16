@@ -1,11 +1,14 @@
 package com.avinash.requestresource;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -53,6 +58,17 @@ public class MainActivity extends AppCompatActivity {
         ViewAnimation.init((FloatingActionButton) findViewById(R.id.fabCall));
         ViewAnimation.init((FloatingActionButton) findViewById(R.id.fabMic));
 
+//        ActionBar ab  = getActionBar();
+//        View layoutFragment = findViewById(R.id.nav_host_fragment);
+//        final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.host_main_host);
+//        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) constraintLayout.getLayoutParams();
+//        params.setMargins(0,ab.getHeight(), 0, 0);
+//        constraintLayout.setLayoutParams(params);
+
+
+
+        //get the list of requests that the current user has placed. This should be sorted according to the created time.
+        getQueryResults();
         setSupportActionBar(toolbar);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -91,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_logout)
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_list, R.id.nav_logout)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -133,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI(ArrayList < Requests > requests, String UITag) {
         if (UITag.equals("requestslist")) {
             //set adapter and list out the requests.
+            System.out.println("data arrived");
         } else {
 
         }
