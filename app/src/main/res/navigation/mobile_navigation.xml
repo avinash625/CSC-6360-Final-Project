@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/nav_logout"
-        android:name="com.avinash.requestresource.ui.logout.home.logoutFragment"
+        android:name="com.avinash.requestresource.logoutFragment"
         android:label="@string/menu_logout"
         tools:layout="@layout/fragment_logout" />
 </navigation>
