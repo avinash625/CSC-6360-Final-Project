@@ -44,6 +44,7 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.DeflaterOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("MissingPermission")
             @Override
             public void onClick(View v) {
-//                Toast.makeText(MainActivity.this, "Calling", Toast.LENGTH_SHORT).show();
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:4703579315"));
                 startActivity(callIntent);
@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
         fabMic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "mic", Toast.LENGTH_SHORT).show();
                 Intent newRequestIntent = new Intent(getApplicationContext(), NewRequest.class);
                 startActivity(newRequestIntent);
             }
@@ -103,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //                        .setAction("Action", null).show();
                 isRotate = ViewAnimation.rotateFab(view, !isRotate);
                 if (isRotate) {
                     ViewAnimation.showIn(fabCall);
@@ -117,8 +114,6 @@ public class MainActivity extends AppCompatActivity {
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_list, R.id.nav_logout)
                 .setDrawerLayout(drawer)
@@ -127,6 +122,23 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hideFABbuttons();
+    }
+
+    public void hideFABbuttons(){
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        isRotate = ViewAnimation.rotateFab(fab, false);
+        FloatingActionButton fabCall = (FloatingActionButton) findViewById(R.id.fabCall);
+        FloatingActionButton fabMic = (FloatingActionButton) findViewById(R.id.fabMic);
+        ViewAnimation.showOut(fabCall);
+        ViewAnimation.showOut(fabMic);
+    }
+
+
 
     private void retrieveRequests() {
         getQueryResults();

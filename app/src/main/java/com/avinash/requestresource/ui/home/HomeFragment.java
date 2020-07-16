@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.avinash.requestresource.MainActivity;
 import com.avinash.requestresource.R;
 
 public class HomeFragment extends Fragment {
@@ -30,6 +31,15 @@ public class HomeFragment extends Fragment {
                 textView.setText(s);
             }
         });
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.hideFABbuttons();
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.hideFABbuttons();
     }
 }

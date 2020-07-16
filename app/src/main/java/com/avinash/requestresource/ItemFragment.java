@@ -70,16 +70,18 @@ public class ItemFragment extends Fragment {
             MainActivity mainActivity = (MainActivity) getActivity();
             ArrayList<Requests> requests = mainActivity.returnRequests();
             recyclerView.setAdapter(new MyItemRecyclerViewAdapter(requests));
+            mainActivity.hideFABbuttons();
         }
         return view;
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
-//    }
-//
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.hideFABbuttons();
+    }
+
 //    @Override
 //    public void onStop() {
 //        super.onStop();
