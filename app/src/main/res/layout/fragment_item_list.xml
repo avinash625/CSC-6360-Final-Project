@@ -11,4 +11,5 @@
     app:layoutManager="LinearLayoutManager"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ItemFragment"
-    tools:listitem="@layout/fragment_item" />
+    tools:listitem="@layout/fragment_item"
+    />

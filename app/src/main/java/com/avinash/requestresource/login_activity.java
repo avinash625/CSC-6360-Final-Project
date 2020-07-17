@@ -167,13 +167,12 @@ public class login_activity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user, String contextValue) {
-        nDialog.dismiss();
         if (contextValue.equals("login")){
             if(user == null){
                 loginFailed();
             }else{
                 getUserDetails(user);
-                nDialog.dismiss();
+
                 Intent mainActivity = new Intent(this, MainActivity.class);
                 startActivity(mainActivity);
 
@@ -187,7 +186,7 @@ public class login_activity extends AppCompatActivity {
                 startActivity(mainActivity);
             }
         }
-
+        nDialog.dismiss();
     }
 
     private void moveToRegisterScreen(){

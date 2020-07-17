@@ -1,5 +1,6 @@
 package com.avinash.requestresource;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +39,7 @@ public class ItemFragment extends Fragment {
     private int mColumnCount = 1;
     private String TAG = "in Item Fragment";
     RecyclerView recyclerView;
+    private ProgressDialog nDialog;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -81,12 +84,18 @@ public class ItemFragment extends Fragment {
             }
             MainActivity mainActivity = (MainActivity) getActivity();
             mainActivity.hideFABbuttons();
-            getQueryResults();
+
+            nDialog = new ProgressDialog(getActivity());
+
+            nDialog.setIndeterminate(false);
+            nDialog.setCancelable(true);
+
         }
         return view;
     }
 
     public void getQueryResults() {
+        nDialog.show();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("requests")
@@ -94,6 +103,7 @@ public class ItemFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task< QuerySnapshot > task) {
+                        nDialog.dismiss();
                         if (task.isSuccessful()) {
                             ArrayList < Requests > requests = new ArrayList < Requests > ();
                             for (QueryDocumentSnapshot document: task.getResult()) {
@@ -119,6 +129,7 @@ public class ItemFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        getQueryResults();
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.hideFABbuttons();
     }
