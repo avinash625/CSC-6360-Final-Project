@@ -7,11 +7,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,9 +19,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.google.android.gms.dynamic.SupportFragmentWrapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -61,7 +60,7 @@ public class login_activity extends AppCompatActivity {
     private Button login_button;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
-
+    private ProgressDialog nDialog;
 
 
     @Override
@@ -92,7 +91,7 @@ public class login_activity extends AppCompatActivity {
                 hideSoftKeyboard();
             }
         });
-        
+
         username.setHint("Username");
         password.setHint("Password");
         mAuth = FirebaseAuth.getInstance();
@@ -100,6 +99,7 @@ public class login_activity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                nDialog.show();
                 if(validateUserEnteredData(username.getText().toString(), password.getText().toString()) == true){
                     validateUserCrednetials(username.getText().toString(), password.getText().toString());
 //                    createUserWithEmail(username.getText().toString(), password.getText().toString());
@@ -108,6 +108,16 @@ public class login_activity extends AppCompatActivity {
                 }
             }
         });
+
+        nDialog = new ProgressDialog(login_activity.this);
+        nDialog.setMessage("Signing you in........");
+        nDialog.setTitle("");
+        nDialog.setIndeterminate(false);
+        nDialog.setCancelable(true);
+
+
+
+
     }
     protected void hideSoftKeyboard() {
         ((InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE))
@@ -157,13 +167,16 @@ public class login_activity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user, String contextValue) {
+        nDialog.dismiss();
         if (contextValue.equals("login")){
             if(user == null){
                 loginFailed();
             }else{
                 getUserDetails(user);
+                nDialog.dismiss();
                 Intent mainActivity = new Intent(this, MainActivity.class);
                 startActivity(mainActivity);
+
             }
         }else if( contextValue.equals("usercreation")){
             if(user == null){

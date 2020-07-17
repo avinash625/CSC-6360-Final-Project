@@ -157,6 +157,8 @@ public class logoutFragment extends Fragment {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                        Intent MainActivity = new Intent(getActivity(), com.avinash.requestresource.MainActivity.class);
+                        startActivity(MainActivity);
                     }
                 });
 
