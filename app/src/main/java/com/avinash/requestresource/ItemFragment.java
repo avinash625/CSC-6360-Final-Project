@@ -129,9 +129,44 @@ public class ItemFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getQueryResults();
         MainActivity mainActivity = (MainActivity) getActivity();
+        if(mainActivity.getUserRole().equals("staff")) {
+            getQueryResults();
+        }else{
+            getQueryResultsForAdmin();
+        }
         mainActivity.hideFABbuttons();
+    }
+
+    private void getQueryResultsForAdmin() {
+        nDialog.show();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("requests")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task< QuerySnapshot > task) {
+                        nDialog.dismiss();
+                        if (task.isSuccessful()) {
+                            ArrayList < Requests > requests = new ArrayList < Requests > ();
+                            for (QueryDocumentSnapshot document: task.getResult()) {
+                                Requests request = new Requests();
+                                request.setQuantity(Integer.parseInt((document.get("quantity").toString())));
+                                request.setCompleted(Boolean.parseBoolean(document.get("completed").toString()));
+                                request.setTitle(document.get("title").toString());
+                                request.setDescription(document.get("description").toString());
+                                request.setUserID(document.get("userID").toString());
+                                request.setPriority(document.get("priority").toString());
+                                requests.add(request);
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+                            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(requests));
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 
 //    @Override

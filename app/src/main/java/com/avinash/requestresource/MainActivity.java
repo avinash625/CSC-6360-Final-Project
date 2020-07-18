@@ -57,6 +57,15 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fabCall;
     private ArrayList<Requests> requestList;
 
+    //static fields
+    private static String userRole;
+
+    public void setUserRole(String role){
+        this.userRole = role;
+    }
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +77,7 @@ public class MainActivity extends AppCompatActivity {
         ViewAnimation.init((FloatingActionButton) findViewById(R.id.fabCall));
         ViewAnimation.init((FloatingActionButton) findViewById(R.id.fabMic));
 
-//        ActionBar ab  = getActionBar();
-//        View layoutFragment = findViewById(R.id.nav_host_fragment);
-//        final ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.host_main_host);
-//        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) constraintLayout.getLayoutParams();
-//        params.setMargins(0,ab.getHeight(), 0, 0);
-//        constraintLayout.setLayoutParams(params);
 
-
-        //get the list of requests that the current user has placed. This should be sorted according to the created time.
-        getQueryResults();
         setSupportActionBar(toolbar);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -198,15 +198,6 @@ public class MainActivity extends AppCompatActivity {
         request.put("priority", "Highest");
         request.put("addressedBy", "");
 
-        //        Requests request = new Requests();
-        //        request.setTitle("test request");
-        //        request.setUserID(user.getUid());
-        //        request.setDescription("a test Description");
-        //        request.setPriority("Highest");
-        //        request.setCompleted(false);
-        //        request.setQuantity(3);
-
-
         db.collection("requests")
                 .add(request)
                 .addOnSuccessListener(new OnSuccessListener < DocumentReference > () {
@@ -257,5 +248,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration) ||
                 super.onSupportNavigateUp();
+    }
+
+    public String getUserRole() {
+        return this.userRole;
     }
 }

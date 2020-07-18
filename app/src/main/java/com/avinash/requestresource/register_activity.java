@@ -1,6 +1,7 @@
 package com.avinash.requestresource;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,10 +18,19 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -57,6 +67,8 @@ public class register_activity extends AppCompatActivity {
     
     private FirebaseUser user;
 
+    private ProgressDialog nDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +82,11 @@ public class register_activity extends AppCompatActivity {
         password = (EditText) findViewById(R.id.register_activity_password);
         login_button = (Button) findViewById(R.id.register_activity_button);
         FrameLayout fl= (FrameLayout) findViewById(R.id.register_activity_framelayout);
+
+        nDialog = new ProgressDialog(register_activity.this);
+        nDialog.setMessage("Creating user........");
+        nDialog.setIndeterminate(false);
+        nDialog.setCancelable(true);
 
         fl.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
@@ -91,10 +108,11 @@ public class register_activity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                nDialog.show();
                 if(validateUserEnteredData(username.getText().toString(), password.getText().toString()) == true){
-                    //validateUserCrednetials(username.getText().toString(), password.getText().toString());
                     createUserWithEmail(username.getText().toString(), password.getText().toString());
                 }else{
+                    nDialog.dismiss();
                     Toast.makeText(getApplicationContext(),"Plese enter valid details!!", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -132,13 +150,64 @@ public class register_activity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             user = mAuth.getCurrentUser();
-                            updateUI(user, "usercreation");
+                            registerUserInUserDB(user.getUid(), "staff");
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             updateUI(null, "usercreation");
+                            nDialog.dismiss();
                         }
 
+                    }
+                });
+    }
+
+    private void getUserDetails(final FirebaseUser user) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").whereEqualTo("userID", user.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task< QuerySnapshot > task) {
+//                        nDialog.dismiss();
+                        if (task.isSuccessful()) {
+                            ArrayList< Requests > requests = new ArrayList < Requests > ();
+                            for (QueryDocumentSnapshot document: task.getResult()) {
+                                MainActivity mainActivity = new MainActivity();
+                                mainActivity.setUserRole((String)document.get("role"));
+                            }
+                            updateUI(FirebaseAuth.getInstance().getCurrentUser(), "usercreation");
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                        nDialog.dismiss();
+                    }
+                });
+    }
+
+    private void registerUserInUserDB(String uid, String staff) {
+        HashMap<String,Object> userRecord = new HashMap<String, Object>();
+        userRecord.put("email", user.getEmail());
+        userRecord.put("displayName", user.getDisplayName());
+        userRecord.put("userID", user.getUid());
+        userRecord.put("role", "staff");
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users")
+                .add(userRecord)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+
+                        getUserDetails(user);
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        nDialog.dismiss();
+                        Log.w(TAG, "Error adding document", e);
                     }
                 });
     }
@@ -148,7 +217,6 @@ public class register_activity extends AppCompatActivity {
             if(user == null){
                 loginFailed();
             }else{
-                getUserDetails(user);
                 Intent mainActivity = new Intent(this, MainActivity.class);
                 startActivity(mainActivity);
             }
@@ -156,7 +224,6 @@ public class register_activity extends AppCompatActivity {
             if(user == null){
                 userCreationFailed();
             }else{
-                getUserDetails(user);
                 Intent mainActivity = new Intent(this, MainActivity.class);
                 startActivity(mainActivity);
             }
@@ -169,8 +236,6 @@ public class register_activity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
     }
 
-    private void getUserDetails(FirebaseUser user) {
-    }
 
     private void loginFailed() {
     }

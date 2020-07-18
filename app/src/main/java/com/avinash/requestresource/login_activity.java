@@ -26,6 +26,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -133,7 +138,8 @@ public class login_activity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "SignInWithEmail:success");
                             user = mAuth.getCurrentUser();
-                            updateUI(user, "login");
+                            getUserDetails(user);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "SignInWithEmail:failure", task.getException());
@@ -171,8 +177,6 @@ public class login_activity extends AppCompatActivity {
             if(user == null){
                 loginFailed();
             }else{
-                getUserDetails(user);
-
                 Intent mainActivity = new Intent(this, MainActivity.class);
                 startActivity(mainActivity);
 
@@ -181,7 +185,6 @@ public class login_activity extends AppCompatActivity {
             if(user == null){
                 userCreationFailed();
             }else{
-                getUserDetails(user);
                 Intent mainActivity = new Intent(this, MainActivity.class);
                 startActivity(mainActivity);
             }
@@ -199,7 +202,25 @@ public class login_activity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
     }
 
-    private void getUserDetails(FirebaseUser user) {
+    private void getUserDetails(final FirebaseUser user) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").whereEqualTo("userID", user.getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task< QuerySnapshot > task) {
+                        nDialog.dismiss();
+                        if (task.isSuccessful()) {
+                            ArrayList< Requests > requests = new ArrayList < Requests > ();
+                            for (QueryDocumentSnapshot document: task.getResult()) {
+                                MainActivity mainActivity = new MainActivity();
+                                mainActivity.setUserRole((String)document.get("role"));
+                            }
+                            updateUI(user, "login");
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 
     private void loginFailed() {
