@@ -176,6 +176,7 @@ public class login_activity extends AppCompatActivity {
         if (contextValue.equals("login")){
             if(user == null){
                 loginFailed();
+                nDialog.dismiss();
             }else{
                 Intent mainActivity = new Intent(this, MainActivity.class);
                 startActivity(mainActivity);
@@ -184,12 +185,13 @@ public class login_activity extends AppCompatActivity {
         }else if( contextValue.equals("usercreation")){
             if(user == null){
                 userCreationFailed();
+                nDialog.dismiss();
             }else{
                 Intent mainActivity = new Intent(this, MainActivity.class);
                 startActivity(mainActivity);
             }
         }
-        nDialog.dismiss();
+
     }
 
     private void moveToRegisterScreen(){
@@ -224,6 +226,7 @@ public class login_activity extends AppCompatActivity {
     }
 
     private void loginFailed() {
+        Toast.makeText(this, "Login Failed. Please check your device internet connection.", Toast.LENGTH_LONG).show();
     }
 
 
