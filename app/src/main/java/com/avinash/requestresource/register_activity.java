@@ -62,6 +62,7 @@ public class register_activity extends AppCompatActivity {
     private boolean mVisible;
     private EditText username;
     private EditText password;
+    private EditText password1;
     private Button login_button;
     private FirebaseAuth mAuth;
     
@@ -81,6 +82,7 @@ public class register_activity extends AppCompatActivity {
         username = (EditText) findViewById(R.id.register_activity_username);
         password = (EditText) findViewById(R.id.register_activity_password);
         login_button = (Button) findViewById(R.id.register_activity_button);
+        password1 = (EditText) findViewById(R.id.register_activity_password2);
         FrameLayout fl= (FrameLayout) findViewById(R.id.register_activity_framelayout);
 
         nDialog = new ProgressDialog(register_activity.this);
@@ -103,17 +105,18 @@ public class register_activity extends AppCompatActivity {
 
         username.setHint("Username");
         password.setHint("Password");
+        password1.setHint("Confirm Password");
         mAuth = FirebaseAuth.getInstance();
 
         login_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 nDialog.show();
-                if(validateUserEnteredData(username.getText().toString(), password.getText().toString()) == true){
+                if(validateUserEnteredData(username.getText().toString(), password.getText().toString(), password1.getText().toString()) == true){
                     createUserWithEmail(username.getText().toString(), password.getText().toString());
                 }else{
                     nDialog.dismiss();
-                    Toast.makeText(getApplicationContext(),"Plese enter valid details!!", Toast.LENGTH_SHORT).show();
+                    ;
                 }
             }
         });
@@ -156,6 +159,12 @@ public class register_activity extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             updateUI(null, "usercreation");
+                            EditText usernameEditText = (EditText) findViewById(R.id.register_activity_username);
+                            EditText passwordEditText = (EditText) findViewById(R.id.register_activity_password);
+                            EditText confirmPassword = (EditText) findViewById(R.id.register_activity_password2);
+//                            usernameEditText.setText("");
+                            passwordEditText.setText("");
+                            confirmPassword.setText("");
                             nDialog.dismiss();
                         }
 
@@ -241,10 +250,15 @@ public class register_activity extends AppCompatActivity {
     }
 
 
-    public boolean validateUserEnteredData(String username, String password){
+    public boolean validateUserEnteredData(String username, String password, String confirmPassword){
         if(username.replace(" ","").equals("") || password.replace(" ", "").equals("")){
+            Toast.makeText(getApplicationContext(),"Plese enter valid details!!", Toast.LENGTH_SHORT).show();
             return false;
         }else if(password.length() < 5){
+            Toast.makeText(getApplicationContext(),"Password should be longer than 5 characters.!!", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(!password.equals(confirmPassword)){
+            Toast.makeText(getApplicationContext(),"Passwords doesn't match!!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

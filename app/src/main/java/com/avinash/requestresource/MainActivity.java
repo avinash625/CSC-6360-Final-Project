@@ -184,35 +184,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void insertOneRequest() {
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Map < String, Object > request = new HashMap < > ();
-        request.put("quantity", "2");
-        request.put("completed", "");
-        request.put("userID", user.getUid());
-        request.put("title", "testtitle");
-        request.put("description", "test description");
-        request.put("priority", "Highest");
-        request.put("addressedBy", "");
-
-        db.collection("requests")
-                .add(request)
-                .addOnSuccessListener(new OnSuccessListener < DocumentReference > () {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-    }
 
     public ArrayList<Requests> returnRequests(){
         return requestList;
