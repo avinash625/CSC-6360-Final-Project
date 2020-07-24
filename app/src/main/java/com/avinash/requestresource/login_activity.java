@@ -216,6 +216,7 @@ public class login_activity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document: task.getResult()) {
                                 MainActivity mainActivity = new MainActivity();
                                 mainActivity.setUserRole((String)document.get("role"));
+                                mainActivity.setUserEmail((String)user.getEmail().toString());
                             }
                             updateUI(user, "login");
                         } else {

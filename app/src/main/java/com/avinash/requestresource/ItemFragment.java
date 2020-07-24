@@ -112,6 +112,7 @@ public class ItemFragment extends Fragment {
             nDialog.setIndeterminate(false);
             nDialog.setCancelable(true);
 
+
         }
         return view;
     }

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,9 +61,19 @@ public class MainActivity extends AppCompatActivity {
     //static fields
     private static String userRole;
 
+
+
+    private static String userEmail;
+
     public void setUserRole(String role){
         this.userRole = role;
     }
+
+    public static void setUserEmail(String userEmail) {
+        MainActivity.userEmail = userEmail;
+    }
+
+
 
 
 
@@ -122,6 +133,12 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView navUsername = (TextView) headerView.findViewById(R.id.app_username);
+        navUsername.setText("Hey User!");
+        TextView navEmail = (TextView) headerView.findViewById(R.id.app_email);
+        navEmail.setText(this.userEmail);
     }
 
     @Override
