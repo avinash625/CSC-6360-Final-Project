@@ -58,6 +58,8 @@ public class ItemFragment extends Fragment {
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser user = mAuth.getCurrentUser();
 
+    private ArrayList<Requests> allRequests;
+
 
 
 
@@ -120,8 +122,9 @@ public class ItemFragment extends Fragment {
                 @Override
                 public void onClick(View view, final int position) {
                     //Values are passing to activity & to fragment as well
-                    Toast.makeText(getActivity(), "Single Click on position :"+position,
+                    Toast.makeText(getActivity(), "Single Click on :"+allRequests.get(position).getTitle(),
                             Toast.LENGTH_SHORT).show();
+
                 }
 
                 @Override
@@ -207,6 +210,7 @@ public class ItemFragment extends Fragment {
                                 request.setUserID(document.get("userID").toString());
                                 request.setPriority(document.get("priority").toString());
                                 requests.add(request);
+                                allRequests  = requests;
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
                             recyclerView.setAdapter(new MyItemRecyclerViewAdapter(requests));
@@ -254,6 +258,7 @@ public class ItemFragment extends Fragment {
                                 request.setUserID(document.get("userID").toString());
                                 request.setPriority(document.get("priority").toString());
                                 requests.add(request);
+                                allRequests = requests;
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
                             recyclerView.setAdapter(new MyItemRecyclerViewAdapter(requests));
@@ -264,9 +269,4 @@ public class ItemFragment extends Fragment {
                 });
     }
 
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
-//    }
 }
