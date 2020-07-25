@@ -1,11 +1,6 @@
 package com.avinash.requestresource;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,8 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
@@ -25,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -273,30 +265,7 @@ public class NewRequest extends AppCompatActivity {
         resetView();
     }
 
-    private void removeFocusTag(){
-//        requestTitle.setFocusable(false);
-//        requestDescription.setFocusable(false);
-//        requestComments.setFocusable(false);
-//        quantity.setFocusable(false);
-//        priority.setFocusable(false);
-//        radio_food.setFocusable(false);
-//        radio_medication.setFocusable(false);
-//        radio_ppe.setFocusable(false);
-    }
-
-    private void setFocusTag(){
-//        requestTitle.setFocusable(true);
-//        requestDescription.setFocusable(true);
-//        requestComments.setFocusable(true);
-//        quantity.setFocusable(true);
-//        priority.setFocusable(true);
-//        radio_food.setFocusable(true);
-//        radio_medication.setFocusable(true);
-//        radio_ppe.setFocusable(true);
-    }
-
     private void setDisabledView(){
-        removeFocusTag();
         requestTitle.setEnabled(false);
         requestDescription.setEnabled(false);
         requestComments.setEnabled(false);
@@ -307,7 +276,6 @@ public class NewRequest extends AppCompatActivity {
         radio_ppe.setEnabled(false);
     }
     private void resetView(){
-        setFocusTag();
         requestTitle.setEnabled(true);
         requestDescription.setEnabled(true);
         requestComments.setEnabled(true);
