@@ -1,39 +1,24 @@
 package com.avinash.requestresource;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
-import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -41,11 +26,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.zip.DeflaterOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,12 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fabMic;
     private FloatingActionButton fabCall;
     private ArrayList<Requests> requestList;
-
     //static fields
     private static String userRole;
-
-
-
     private static String userEmail;
 
     public void setUserRole(String role){
@@ -72,11 +49,6 @@ public class MainActivity extends AppCompatActivity {
     public static void setUserEmail(String userEmail) {
         MainActivity.userEmail = userEmail;
     }
-
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
         ViewAnimation.showOut(fabMic);
     }
 
-
-
     private void retrieveRequests() {
         getQueryResults();
     }
@@ -180,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                                 request.setDescription(document.get("description").toString());
                                 request.setUserID(document.get("userID").toString());
                                 request.setPriority(document.get("priority").toString());
+                                request.setComments(document.get("comments").toString());
                                 requests.add(request);
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
@@ -201,13 +172,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     public ArrayList<Requests> returnRequests(){
         return requestList;
     }
-
-
 
     @Override
     public void onBackPressed() {

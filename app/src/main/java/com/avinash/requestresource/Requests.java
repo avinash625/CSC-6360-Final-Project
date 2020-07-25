@@ -1,7 +1,7 @@
 package com.avinash.requestresource;
 
 public class Requests extends Throwable {
-    private int requestID;
+    private String requestID;
     private int quantity;
     private boolean completed;
     private String userID;
@@ -9,12 +9,33 @@ public class Requests extends Throwable {
     private String description;
     private String priority;
     private String addressedBy;
+    private String type;
 
-    public int getRequestID() {
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    private String comments;
+
+    public String getRequestID() {
         return requestID;
     }
 
-    public void setRequestID(int requestID) {
+    public void setRequestID(String requestID) {
         this.requestID = requestID;
     }
 

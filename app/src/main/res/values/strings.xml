@@ -34,4 +34,9 @@
     <string name="title_activity_login_activity">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <!--Request Button Strings -->
+    <string name="request_add">Place your Request.</string>
+    <string name="request_view">Edit Request</string>
+    <string name="request_update">Update Request</string>
 </resources>

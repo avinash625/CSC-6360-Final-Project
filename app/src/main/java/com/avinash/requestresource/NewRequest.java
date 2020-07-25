@@ -1,6 +1,7 @@
 package com.avinash.requestresource;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -37,8 +38,10 @@ public class NewRequest extends AppCompatActivity {
 
     EditText requestTitle;
     EditText requestDescription;
+    EditText requestComments;
     EditText quantity;
     Spinner priority;
+    Button requestButton;
     RadioButton radio_food, radio_medication, radio_ppe;
 
 
@@ -46,12 +49,8 @@ public class NewRequest extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
-
-
         Map< String, Object > request = new HashMap< >();
-        request.put("quantity", quantity.getText().toString());
+        request.put("quantity", Integer.parseInt(quantity.getText().toString()));
         request.put("requestedOn", "");
         request.put("completed", "");
         request.put("userID", user.getUid());
@@ -59,6 +58,13 @@ public class NewRequest extends AppCompatActivity {
         request.put("description", requestDescription.getText().toString());
         request.put("priority", priority.getSelectedItemId());
         request.put("addressedBy", "");
+        request.put("comments",requestComments.getText().toString());
+        if(radio_food.isChecked())
+            request.put("type", "radio_food");
+        else if(radio_medication.isChecked())
+            request.put("type","radio_medication");
+        else
+            request.put("type","radio_ppe");
 
         db.collection("requests")
                 .add(request)
@@ -90,12 +96,20 @@ public class NewRequest extends AppCompatActivity {
         radio_food = (RadioButton) findViewById(R.id.radio_food);
         radio_medication = (RadioButton) findViewById(R.id.radio_medication);
         radio_ppe  = (RadioButton) findViewById(R.id.radio_ppe);
+        requestComments = (EditText) findViewById(R.id.requestComments);
 
-        Button requestButton = (Button)findViewById(R.id.requestButton);
+        requestButton = (Button)findViewById(R.id.requestButton);
         requestButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                insertOneRequest();
+                String tag = requestButton.getText().toString();
+                if(tag.equals("Place your Request"))
+                    insertOneRequest();
+                else if(tag.equals("Edit Request"))
+                    setViewToUpdate();
+                else if(tag.equals("Update Request"))
+                    updateOneRequest();
+                    
             }
         });
         ArrayList<String> arrayList = new ArrayList<>();
@@ -110,11 +124,156 @@ public class NewRequest extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String tutorialsName = parent.getItemAtPosition(position).toString();
-                Toast.makeText(parent.getContext(), "Selected: " + tutorialsName,Toast.LENGTH_LONG).show();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    private void updateOneRequest() {
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map< String, Object > request = new HashMap< >();
+        request.put("quantity", Integer.parseInt(quantity.getText().toString()));
+        request.put("requestedOn", "");
+        request.put("completed", "");
+        request.put("userID",getIntent().getStringExtra("userID"));
+        request.put("title", requestTitle.getText().toString());
+        request.put("description", requestDescription.getText().toString());
+        request.put("priority", priority.getSelectedItemId());
+        request.put("addressedBy", "");
+        request.put("comments",requestComments.getText().toString());
+        if(radio_food.isChecked())
+            request.put("type", "radio_food");
+        else if(radio_medication.isChecked())
+            request.put("type","radio_medication");
+        else
+            request.put("type","radio_ppe");
+
+        db.collection("requests")
+                .document(getIntent().getStringExtra("requestID"))
+                .update(request).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(mainActivity);
+                Log.d(TAG, "DocumentSnapshot updated with ID: " + getIntent().getStringExtra("requestID"));
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = getIntent();
+        String action = intent.getStringExtra("action");
+        if(action == null || action.equals("add")){
+            setViewToAdd();
+        }else if(action.equals("view")) {
+            setViewToEdit();
+        }else if(action.equals("update")){
+            setViewToUpdate();
+        }
+    }
+
+    private void setViewToAdd() {
+        requestButton.setText("Place your Request");
+        resetView();
+    }
+
+    private void removeFocusTag(){
+//        requestTitle.setFocusable(false);
+//        requestDescription.setFocusable(false);
+//        requestComments.setFocusable(false);
+//        quantity.setFocusable(false);
+//        priority.setFocusable(false);
+//        radio_food.setFocusable(false);
+//        radio_medication.setFocusable(false);
+//        radio_ppe.setFocusable(false);
+    }
+
+    private void setFocusTag(){
+//        requestTitle.setFocusable(true);
+//        requestDescription.setFocusable(true);
+//        requestComments.setFocusable(true);
+//        quantity.setFocusable(true);
+//        priority.setFocusable(true);
+//        radio_food.setFocusable(true);
+//        radio_medication.setFocusable(true);
+//        radio_ppe.setFocusable(true);
+    }
+
+    private void setDisabledView(){
+        removeFocusTag();
+        requestTitle.setEnabled(false);
+        requestDescription.setEnabled(false);
+        requestComments.setEnabled(false);
+        quantity.setEnabled(false);
+        priority.setEnabled(false);
+        radio_food.setEnabled(false);
+        radio_medication.setEnabled(false);
+        radio_ppe.setEnabled(false);
+    }
+    private void resetView(){
+        setFocusTag();
+        requestTitle.setEnabled(true);
+        requestDescription.setEnabled(true);
+        requestComments.setEnabled(true);
+        quantity.setEnabled(true);
+        priority.setEnabled(true);
+        radio_food.setEnabled(true);
+        radio_medication.setEnabled(true);
+        radio_ppe.setEnabled(true);
+    }
+
+    private void setViewToUpdate() {
+        Intent intent = getIntent();
+        resetView();
+
+        requestTitle.setText(intent.getStringExtra("title"));
+        requestDescription.setText(intent.getStringExtra("description"));
+        requestComments.setText(intent.getStringExtra("comments"));
+        quantity.setText(intent.getStringExtra("quantity"));
+        priority.setSelection(intent.getIntExtra("priority", 0));
+        if(intent.getStringExtra("type").equals("radio_food")){
+            radio_food.setChecked(true);
+        }else if(intent.getStringExtra("type").equals("radio_medication")){
+            radio_medication.setChecked(true);
+        }else{
+            radio_ppe.setChecked(true);
+        }
+        requestButton.setText("Update Request");
+    }
+
+    private void setViewToEdit() {
+        Intent intent = getIntent();
+        setDisabledView();
+        requestTitle.setText(intent.getStringExtra("title"));
+        requestDescription.setText(intent.getStringExtra("description"));
+        requestComments.setText(intent.getStringExtra("comments"));
+        quantity.setText(intent.getStringExtra("quantity"));
+        priority.setSelection(intent.getIntExtra("priority", 0));
+        requestButton.setText("Edit Request");
+        if(intent.getStringExtra("type").equals("radio_food")){
+            radio_food.setChecked(true);
+            radio_medication.setChecked(false);
+            radio_ppe.setChecked(false);
+        }else if(intent.getStringExtra("type").equals("radio_medication")){
+            radio_medication.setChecked(true);
+            radio_ppe.setChecked(false);
+            radio_food.setChecked(false);
+        }else{
+            radio_medication.setChecked(false);
+            radio_food.setChecked(false);
+            radio_ppe.setChecked(true);
+        }
     }
 }

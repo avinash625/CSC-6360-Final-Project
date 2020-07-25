@@ -4,44 +4,26 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
-
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.avinash.requestresource.dummy.DummyContent;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.time.*;
 
 /**
  * A fragment representing a list of Items.
@@ -59,10 +41,6 @@ public class ItemFragment extends Fragment {
     FirebaseUser user = mAuth.getCurrentUser();
 
     private ArrayList<Requests> allRequests;
-
-
-
-
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -125,6 +103,18 @@ public class ItemFragment extends Fragment {
                     Toast.makeText(getActivity(), "Single Click on :"+allRequests.get(position).getTitle(),
                             Toast.LENGTH_SHORT).show();
 
+                    Intent newRequestIntent = new Intent(getContext(), NewRequest.class);
+                    newRequestIntent.putExtra("action", "view");
+                    newRequestIntent.putExtra("userID",allRequests.get(position).getUserID());
+                    newRequestIntent.putExtra("title",allRequests.get(position).getTitle());
+                    newRequestIntent.putExtra("description",allRequests.get(position).getDescription());
+                    newRequestIntent.putExtra("comments",allRequests.get(position).getComments());
+                    newRequestIntent.putExtra("quantity",Integer.toString(allRequests.get(position).getQuantity()));
+                    newRequestIntent.putExtra("priority",allRequests.get(position).getPriority());
+                    newRequestIntent.putExtra("requestID",allRequests.get(position).getRequestID());
+                    newRequestIntent.putExtra("type",allRequests.get(position).getType());
+                    startActivity(newRequestIntent);
+                    getActivity().finish();
                 }
 
                 @Override
@@ -209,6 +199,9 @@ public class ItemFragment extends Fragment {
                                 request.setDescription(document.get("description").toString());
                                 request.setUserID(document.get("userID").toString());
                                 request.setPriority(document.get("priority").toString());
+                                request.setComments(document.get("comments").toString());
+                                request.setType(document.get("type").toString());
+                                request.setRequestID(document.getId().toString());
                                 requests.add(request);
                                 allRequests  = requests;
                                 Log.d(TAG, document.getId() + " => " + document.getData());
@@ -220,10 +213,6 @@ public class ItemFragment extends Fragment {
                     }
                 });
     }
-
-
-
-
 
     @Override
     public void onResume() {
@@ -251,12 +240,15 @@ public class ItemFragment extends Fragment {
                             ArrayList < Requests > requests = new ArrayList < Requests > ();
                             for (QueryDocumentSnapshot document: task.getResult()) {
                                 Requests request = new Requests();
-                                request.setQuantity(Integer.parseInt((document.get("quantity").toString())));
+                                request.setQuantity((Integer.parseInt(document.get("quantity").toString())));
                                 request.setCompleted(Boolean.parseBoolean(document.get("completed").toString()));
                                 request.setTitle(document.get("title").toString());
                                 request.setDescription(document.get("description").toString());
                                 request.setUserID(document.get("userID").toString());
                                 request.setPriority(document.get("priority").toString());
+                                request.setComments(document.get("comments").toString());
+                                request.setType(document.get("type").toString());
+                                request.setRequestID(document.getId().toString());
                                 requests.add(request);
                                 allRequests = requests;
                                 Log.d(TAG, document.getId() + " => " + document.getData());
