@@ -100,8 +100,8 @@ public class ItemFragment extends Fragment {
                 @Override
                 public void onClick(View view, final int position) {
                     //Values are passing to activity & to fragment as well
-                    Toast.makeText(getActivity(), "Single Click on :"+allRequests.get(position).getTitle(),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "Single Click on :"+allRequests.get(position).getTitle(),
+//                            Toast.LENGTH_SHORT).show();
 
                     Intent newRequestIntent = new Intent(getContext(), NewRequest.class);
                     newRequestIntent.putExtra("action", "view");
@@ -120,8 +120,8 @@ public class ItemFragment extends Fragment {
 
                 @Override
                 public void onLongClick(View view, int position) {
-                    Toast.makeText(getActivity(), "Long press on position :"+position,
-                            Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getActivity(), "Long press on position :"+position,
+//                            Toast.LENGTH_LONG).show();
                 }
             }));
 

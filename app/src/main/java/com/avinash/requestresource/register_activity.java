@@ -137,7 +137,6 @@ public class register_activity extends AppCompatActivity {
                             Log.w(TAG, "SignInWithEmail:failure", task.getException());
                             Toast.makeText(register_activity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null, "login");
                         }
 
                     }
@@ -162,7 +161,6 @@ public class register_activity extends AppCompatActivity {
                             EditText usernameEditText = (EditText) findViewById(R.id.register_activity_username);
                             EditText passwordEditText = (EditText) findViewById(R.id.register_activity_password);
                             EditText confirmPassword = (EditText) findViewById(R.id.register_activity_password2);
-//                            usernameEditText.setText("");
                             passwordEditText.setText("");
                             confirmPassword.setText("");
                             nDialog.dismiss();
