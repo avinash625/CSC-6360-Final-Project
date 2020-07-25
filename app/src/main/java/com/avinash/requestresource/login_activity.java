@@ -97,7 +97,7 @@ public class login_activity extends AppCompatActivity {
             }
         });
 
-        username.setHint("Username");
+        username.setHint("Username(Email)");
         password.setHint("Password");
         mAuth = FirebaseAuth.getInstance();
 
