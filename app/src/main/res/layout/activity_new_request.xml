@@ -206,7 +206,20 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout6"
-            app:layout_constraintVertical_bias="0.73"
+            app:layout_constraintVertical_bias="0.52"
+            app:layout_constraintWidth_percent="0.6" />
+
+        <Button
+            android:id="@+id/closeRequestButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="close Request."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/requestButton"
+            app:layout_constraintVertical_bias="0.13999999"
             app:layout_constraintWidth_percent="0.6" />
 
         <LinearLayout

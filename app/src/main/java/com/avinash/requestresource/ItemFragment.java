@@ -113,6 +113,7 @@ public class ItemFragment extends Fragment {
                     newRequestIntent.putExtra("priority",allRequests.get(position).getPriority());
                     newRequestIntent.putExtra("requestID",allRequests.get(position).getRequestID());
                     newRequestIntent.putExtra("type",allRequests.get(position).getType());
+                    newRequestIntent.putExtra("completed",allRequests.get(position).isCompleted());
                     startActivity(newRequestIntent);
                     getActivity().finish();
                 }

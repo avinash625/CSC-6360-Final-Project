@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -43,6 +44,7 @@ public class NewRequest extends AppCompatActivity {
     Spinner priority;
     Button requestButton;
     RadioButton radio_food, radio_medication, radio_ppe;
+    Button completeRequestButton;
 
 
     private void insertOneRequest() {
@@ -52,7 +54,7 @@ public class NewRequest extends AppCompatActivity {
         Map< String, Object > request = new HashMap< >();
         request.put("quantity", Integer.parseInt(quantity.getText().toString()));
         request.put("requestedOn", "");
-        request.put("completed", "");
+        request.put("completed", "false");
         request.put("userID", user.getUid());
         request.put("title", requestTitle.getText().toString());
         request.put("description", requestDescription.getText().toString());
@@ -85,6 +87,12 @@ public class NewRequest extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(mainActivity);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_request);
@@ -97,7 +105,33 @@ public class NewRequest extends AppCompatActivity {
         radio_medication = (RadioButton) findViewById(R.id.radio_medication);
         radio_ppe  = (RadioButton) findViewById(R.id.radio_ppe);
         requestComments = (EditText) findViewById(R.id.requestComments);
+        completeRequestButton = (Button) findViewById(R.id.closeRequestButton);
 
+        MainActivity mainActivity = new MainActivity();
+        String role = mainActivity.getUserRole();
+        if(role.equals("staff")){
+            completeRequestButton.setVisibility(View.GONE);
+        }else{
+            Intent intent = getIntent();
+            String action = intent.getStringExtra("action");
+            if(action == null || action.equals("add"))
+                completeRequestButton.setVisibility(View.GONE);
+            else
+                completeRequestButton.setVisibility(View.VISIBLE);
+        }
+        completeRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                boolean completed = getIntent().getBooleanExtra("completed", false);
+                if(completed == true){
+                    Snackbar.make(v, "Request is already Closed", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }else{
+                    closeOneRequest();
+                }
+            }
+        });
         requestButton = (Button)findViewById(R.id.requestButton);
         requestButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -105,8 +139,16 @@ public class NewRequest extends AppCompatActivity {
                 String tag = requestButton.getText().toString();
                 if(tag.equals("Place your Request"))
                     insertOneRequest();
-                else if(tag.equals("Edit Request"))
-                    setViewToUpdate();
+                else if(tag.equals("Edit Request")){
+                    Intent intent = getIntent();
+                    boolean completed = getIntent().getBooleanExtra("completed", false);
+                    if(completed == false)
+                        setViewToUpdate();
+                    else{
+                        Snackbar.make(v, "Request is already Closed", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                }
                 else if(tag.equals("Update Request"))
                     updateOneRequest();
                     
@@ -131,6 +173,47 @@ public class NewRequest extends AppCompatActivity {
         });
     }
 
+    private void closeOneRequest() {
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map< String, Object > request = new HashMap< >();
+        request.put("quantity", Integer.parseInt(quantity.getText().toString()));
+        request.put("requestedOn", "");
+        request.put("completed", "true");
+        request.put("userID",getIntent().getStringExtra("userID"));
+        request.put("title", requestTitle.getText().toString());
+        request.put("description", requestDescription.getText().toString());
+        request.put("priority", priority.getSelectedItemId());
+        request.put("addressedBy", FirebaseAuth.getInstance().getCurrentUser().getEmail().toString());
+        request.put("comments",requestComments.getText().toString());
+        if(radio_food.isChecked())
+            request.put("type", "radio_food");
+        else if(radio_medication.isChecked())
+            request.put("type","radio_medication");
+        else
+            request.put("type","radio_ppe");
+
+        db.collection("requests")
+                .document(getIntent().getStringExtra("requestID"))
+                .update(request).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(mainActivity);
+                finish();
+                Log.d(TAG, "DocumentSnapshot updated with ID: " + getIntent().getStringExtra("requestID"));
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
+
+
     private void updateOneRequest() {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -138,7 +221,7 @@ public class NewRequest extends AppCompatActivity {
         Map< String, Object > request = new HashMap< >();
         request.put("quantity", Integer.parseInt(quantity.getText().toString()));
         request.put("requestedOn", "");
-        request.put("completed", "");
+        request.put("completed", "false");
         request.put("userID",getIntent().getStringExtra("userID"));
         request.put("title", requestTitle.getText().toString());
         request.put("description", requestDescription.getText().toString());
@@ -186,6 +269,7 @@ public class NewRequest extends AppCompatActivity {
 
     private void setViewToAdd() {
         requestButton.setText("Place your Request");
+        completeRequestButton.setVisibility(View.GONE);
         resetView();
     }
 
